@@ -1,0 +1,232 @@
+$todo-color: #b3cbaa;
+$inprogress-color: #d3bbd5;
+$done-color: #c3e1e7;
+$header-bg: #aa9696;
+$header-border: #928181;
+$clock-bg: #d2caca;
+$task-card-bg: rgba(200, 227, 189, 0.52);
+
+
+$font-family-base: "Montserrat", sans-serif;
+$border-radius: 12px;
+$border-radius-lg: 15px;
+$border-radius-xl: 20px;
+
+@import 'bootstrap/scss/bootstrap';
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.header {
+  padding: 40px 25px;
+  background-color: $header-bg;
+  display: flex;
+  margin-bottom: 25px;
+  border: 1px solid $header-border;
+  border-radius: $border-radius-lg;
+  justify-content: space-between;
+
+  &__title {
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  &__clock {
+    padding: 5px 20px;
+    background-color: $clock-bg;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+  }
+}
+
+.main {
+  padding: 0 30px;
+  display: flex;
+  column-gap: 20px;
+}
+
+.category {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #000;
+  border-radius: $border-radius-xl;
+  width: 100%;
+  justify-content: space-between;
+  min-height: 320px;
+  max-height: max-content;
+  overflow: hidden;
+
+  &__header {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+
+  &__button {
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  &__body {
+    padding: 20px 10px;
+  }
+}
+
+// Цвета категорий
+.todo> :first-child,
+.todo> :last-child {
+  background-color: $todo-color !important;
+}
+
+.inProgress> :first-child {
+  background-color: $inprogress-color !important;
+}
+
+.done> :first-child,
+.done> :last-child {
+  background-color: $done-color !important;
+}
+
+/* Стилизация карточки задачи */
+.task {
+  background: rgba(200, 227, 189, 0.52);
+  padding: 15px 10px;
+  border-radius: 20px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 10px;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__actions-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  &__actions-toggle-checkbox {
+    display: none;
+  }
+
+  &__actions-toggle {
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.2s;
+  }
+
+  &__actions-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    min-width: 120px;
+    z-index: 2;
+  }
+
+  &__actions-toggle-checkbox:hover+.task__actions-toggle+.task__actions-menu {
+    display: flex;
+  }
+
+  &__action-btn {
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #e0dfdf;
+    }
+  }
+
+  .btn-edit {
+    border-bottom: 1px solid #eee;
+  }
+
+  &__description {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &__status {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  &__information {
+    display: flex;
+    column-gap: 5px;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+}
+
+/*Подтверждение удаления*/
+.delete-confirmation {
+  background-color: #b3cbaa;
+  color: #ffffff;
+  padding: 30px;
+  text-align: center;
+
+}
+
+.confirmation__heading {
+  font-size: 16px;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.confirmation__text {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.confirmation__button {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  border-radius: 6px;
+  border: none;
+}
+
+.confirmation__button:hover {
+  background-color: #e0dfdf;
+}

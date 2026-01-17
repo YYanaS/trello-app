@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parcel Vanilla App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="header__title">Trello Board</h1>
+      <div class="header__clock">12:32</div>
+    </header>
+    <main class="main">
+            <section class="category todo">
+        <div class="category__header">
+          <h3 class="category__title">TODO</h3>
+          <p class="badge rounded-pill">2</p>
+        </div>
+        <div class="category__body">
+          <article class="task">
+            <div class="task__header">
+              <h4 class="task__title">Разработка главной страницы</h4>
+              <div class="dropdown">
+                <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown">⋮</button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">Edit</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                      Delete
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p class="task__description">
+              Создать адаптивную главную страницу с современным дизайном.
+            </p>
+            <select class="task__status">
+              <option selected>todo</option>
+              <option>in progress</option>
+              <option>done</option>
+            </select>
+            <div class="task__information">
+              <p>Иван Петров</p>
+              <p>15 декабря, 15:00</p>
+            </div>
+          </article>
+        </div>
+        <button class="category__button btn">Add todo</button>
+      </section>
+      <section class="category inProgress">
+        <div class="category__header">
+          <h3 class="category__title">IN PROGRESS</h3>
+          <p class="badge rounded-pill">1</p>
+        </div>
+        <div class="category__body"></div>
+      </section>
+      <section class="category done">
+        <div class="category__header">
+          <h3 class="category__title">DONE</h3>
+          <p class="badge rounded-pill">1</p>
+        </div>
+        <div class="category__body"></div>
+        <button class="category__button btn btn-outline-danger">
+          Delete all
+        </button>
+      </section>
+    </main>
+  </div>
+  <!-- Delete modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content delete-confirmation">
+        <h3 class="confirmation__heading">Delete task?</h3>
+        <p class="confirmation__text">
+          The task will be permanently deleted.
+        </p>
+        <div class="d-flex justify-content-center gap-2">
+          <button class="confirmation__button btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button class="confirmation__button btn btn-danger">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
