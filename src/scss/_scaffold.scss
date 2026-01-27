@@ -28,7 +28,7 @@ $border-radius-xl: 20px;
   padding: 16px;
 }
 
-.header{
+.header {
   padding: 40px 25px;
   background-color: #aa9696;
   display: flex;
@@ -38,12 +38,12 @@ $border-radius-xl: 20px;
   justify-content: space-between;
 }
 
-.header__title{
+.header__title {
   font-size: 30px;
   font-weight: 600;
 }
 
-.header__clock{
+.header__clock {
   padding: 5px 20px;
   background-color: #d2caca;
   font-size: 12px;
@@ -53,14 +53,14 @@ $border-radius-xl: 20px;
   border-radius: 5px;
 }
 
-.main{
+.main {
   padding: 0 30px;
   display: flex;
   column-gap: 10px;
   justify-content: space-around;
 }
 
-.category{
+.category {
   display: flex;
   flex-direction: column;
   border: 1px solid #000;
@@ -72,17 +72,17 @@ $border-radius-xl: 20px;
   overflow: hidden;
 }
 
-.todo > :first-child,
-.todo > :last-child {
+.todo> :first-child,
+.todo> :last-child {
   background-color: #b3cbaa;
 }
 
-.inProgress > :first-child{
+.inProgress> :first-child {
   background-color: #d3bbd5;
 }
 
-.done > :first-child,
-.done > :last-child {
+.done> :first-child,
+.done> :last-child {
   background-color: #c3e1e7;
 }
 
@@ -106,18 +106,21 @@ $border-radius-xl: 20px;
   cursor: pointer;
 }
 
-.category__body{
+.category__body {
   padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
 }
 
 /* Стилизация карточки задачи */
-.task{
+.task {
   background: rgba(200, 227, 189, 0.52);
   padding: 15px 10px;
   border-radius: 20px;
 }
 
-.task__header{
+.task__header {
   display: flex;
   justify-content: space-between;
   column-gap: 10px;
@@ -125,7 +128,7 @@ $border-radius-xl: 20px;
   margin-bottom: 5px;
 }
 
-.task__title{
+.task__title {
   font-size: 16px;
   font-weight: 600;
 }
@@ -152,14 +155,14 @@ $border-radius-xl: 20px;
   background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: none;
   flex-direction: column;
   min-width: 120px;
   z-index: 2;
 }
 
-.task__actions-toggle-checkbox:hover + .task__actions-toggle + .task__actions-menu {
+.task__actions-toggle-checkbox:hover+.task__actions-toggle+.task__actions-menu {
   display: flex;
 }
 
@@ -178,7 +181,7 @@ $border-radius-xl: 20px;
   border-bottom: 1px solid #eee;
 }
 
-.task__description{
+.task__description {
   margin-bottom: 10px;
   font-size: 14px;
   line-height: 16px;
@@ -210,7 +213,7 @@ $border-radius-xl: 20px;
 }
 
 /*Подтверждение удаления*/
-.delete-confirmation{
+.delete-confirmation {
   background-color: #b3cbaa;
   color: #ffffff;
   padding: 30px;
@@ -218,7 +221,7 @@ $border-radius-xl: 20px;
 
 }
 
-.confirmation__heading{
+.confirmation__heading {
   font-size: 16px;
   color: #ffffff;
   margin-bottom: 10px;
@@ -229,7 +232,7 @@ $border-radius-xl: 20px;
   margin-bottom: 10px;
 }
 
-.confirmation__button{
+.confirmation__button {
   padding: 10px 16px;
   cursor: pointer;
   font-size: 14px;
