@@ -258,3 +258,9 @@ $border-radius-xl: 20px;
 .modal-footer {
   border-top: none;
 }
+
+.form-control{
+  max-height: 150px;
+  overflow-y: auto;
+  resize: vertical;  
+}

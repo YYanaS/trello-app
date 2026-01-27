@@ -1,9 +1,13 @@
 import '../scss/app.scss'
 import { Modal, Dropdown } from 'bootstrap'
 
+// Variables
+const TASKS_STORAGE_KEY = 'tasks'
+let state = { data: [] }
 let users = []
+let currentEditingTaskId = null
 
-async function fetchUsers () {
+async function fetchUsers() {
   try {
     const response = await fetch('https://jsonplaceholder.typicode.com/users')
 
@@ -12,7 +16,7 @@ async function fetchUsers () {
     }
 
     const data = await response.json()
-     
+
     return data.map(user => user.name)
 
   } catch (error) {
@@ -26,17 +30,9 @@ async function init() {
   initClock()
   initDropdowns()
   initAssigneeSelect()
-
-  // Listeners
-  buttonAddTaskElement.addEventListener('click', () => addTaskModalInstance.show())
-  saveTaskButton.addEventListener('click', handleFormSubmit)
-  buttonDeleteAllDoneElement.addEventListener('click', handleClickDeleteAll)
-  boardElement.addEventListener('click', handleClickTask)
-  boardElement.addEventListener('change', handleChangeTaskStatus)
-  deleteModalConfirmButton.addEventListener('click', handleConfirmDelete)
-
-  return users
 }
+
+init()
 
 // Constructor
 class Task {
@@ -50,12 +46,6 @@ class Task {
     this.status = status
   }
 }
-
-//Veriables
-const TASKS_STORAGE_KEY = 'tasks'
-let state = { data: [] }
-let taskToDeleteId = null
-let deleteAll = false
 
 // DOM
 const buttonAddTaskElement = document.getElementById('buttonAddTodo')
@@ -73,16 +63,31 @@ const saveTaskButton = document.getElementById('saveTaskButton')
 const taskForm = document.getElementById('taskForm')
 const taskTitleInput = document.getElementById('taskTitle')
 const taskDescriptionInput = document.getElementById('taskDescription')
-const taskAssigneeInput = document.getElementById('taskAssignee') // select одного разработчика
+const taskAssigneeInput = document.getElementById('taskAssignee')
 
-// Init
-init()
-
-
+// Listeners
+buttonAddTaskElement.addEventListener('click', () => addTaskModalInstance.show())
+taskForm.addEventListener('submit', handleTaskFormSubmit)
+buttonDeleteAllDoneElement.addEventListener('click', handleClickDeleteAll)
+boardElement.addEventListener('click', handleBoardClick)
+boardElement.addEventListener('change', handleChangeTaskStatus)
 
 // Инициализация dropdown
 function initDropdowns() {
-  document.querySelectorAll('.dropdown-toggle').forEach(el => new Dropdown(el))
+  document.querySelectorAll('.dropdown-toggle').forEach(element => new Dropdown(element))
+}
+
+// Открытия модалки для редактирования
+function openEditTaskModal(taskId) {
+  const task = state.data.find(t => t.id === taskId)
+  if (!task) return
+
+  taskTitleInput.value = task.title
+  taskDescriptionInput.value = task.description || ''
+  taskAssigneeInput.value = task.assignee
+
+  currentEditingTaskId = taskId
+  addTaskModalInstance.show()
 }
 
 // Инициализация select с разработчиками
@@ -97,94 +102,71 @@ function initAssigneeSelect() {
 }
 
 // Handlers
-function handleFormSubmit() {
-  const title = taskTitleInput.value.trim()
-  const description = taskDescriptionInput.value.trim()
-  const assignee = taskAssigneeInput.value
+function handleTaskFormSubmit(event) {
+  event.preventDefault()
+
+  const formData = new FormData(taskForm)
+  const title = formData.get('title')?.trim()
+  const description = formData.get('description')?.trim()
+  const assignee = formData.get('assignee')
 
   if (!title || !assignee) {
-    alert('Пожалуйста, заполните Title и Assignee')
+    alert('Please fill the Title and select the Assignee')
     return
   }
 
-  const newTask = new Task({ title, description, assignee })
-  const newData = structuredClone(state.data)
-  newData.push(newTask)
-  setState({ data: newData })
+  if (currentEditingTaskId) {
+    const task = state.data.find(t => t.id === currentEditingTaskId)
+    if (task) {
+      task.title = title
+      task.description = description
+      task.assignee = assignee
+    }
+  } else {
+    const newTask = new Task({ title, description, assignee })
+    state.data.push(newTask)
+  }
 
+  setState({ data: state.data })
   taskForm.reset()
   addTaskModalInstance.hide()
+  currentEditingTaskId = null
 }
 
-function handleClickDeleteAll() {
-  deleteAll = true
-  taskToDeleteId = null
-  deleteModalInstance.show()
-}
-
-function handleClickTask(event) {
+function handleBoardClick(event) {
   const deleteBtn = event.target.closest('.delete-task-btn')
   if (deleteBtn) {
-    const taskElement = deleteBtn.closest('.task')
-    taskToDeleteId = taskElement.dataset.id
-    deleteAll = false
-    deleteModalInstance.show()
+    const taskId = deleteBtn.closest('.task').dataset.id
+    handleClickDeleteTask(taskId)
     return
   }
 
   const editBtn = event.target.closest('.edit-task')
   if (editBtn) {
-    const taskElement = editBtn.closest('.task')
-    const taskId = taskElement.dataset.id
-    const task = state.data.find(t => t.id === taskId)
-    if (task) {
-      taskTitleInput.value = task.title
-      taskDescriptionInput.value = task.description || ''
-      taskAssigneeInput.value = task.assignee 
-
-      saveTaskButton.onclick = () => handleUpdateTask(taskId)
-      addTaskModalInstance.show()
-    }
-  }
-}
-
-function handleUpdateTask(taskId) {
-  const title = taskTitleInput.value.trim()
-  const description = taskDescriptionInput.value.trim()
-  const assignee = taskAssigneeInput.value
-
-  if (!title || !assignee) {
-    alert('Пожалуйста, заполните Title и Assignee')
+    const taskId = editBtn.closest('.task').dataset.id
+    openEditTaskModal(taskId)
     return
   }
-
-  const index = getIndexTaskById(taskId)
-  if (index !== -1) {
-    const newData = structuredClone(state.data)
-    newData[index] = { ...newData[index], title, description, assignee }
-    setState({ data: newData })
-  }
-
-  saveTaskButton.onclick = handleFormSubmit
-  taskForm.reset()
-  addTaskModalInstance.hide()
 }
 
-function handleConfirmDelete() {
-  if (deleteAll) {
-    setState({ data: state.data.filter(t => t.status !== 'done') })
-  } else if (taskToDeleteId) {
-    const index = getIndexTaskById(taskToDeleteId)
+function handleClickDeleteTask(taskId) {
+  deleteModalConfirmButton.onclick = () => {
+    const index = getIndexTaskById(taskId)
     if (index !== -1) {
-      const newData = structuredClone(state.data)
-      newData.splice(index, 1)
-      setState({ data: newData })
+      state.data.splice(index, 1)
+      setState({ data: state.data })
     }
+    deleteModalInstance.hide()
   }
+  deleteModalInstance.show()
+}
 
-  taskToDeleteId = null
-  deleteAll = false
-  deleteModalInstance.hide()
+function handleClickDeleteAll() {
+  deleteModalConfirmButton.onclick = () => {
+    setState({ data: state.data.filter(t => t.status !== 'done') })
+    deleteModalInstance.hide()
+  }
+  deleteModalInstance.show()
 }
 
 function handleChangeTaskStatus(event) {
@@ -232,7 +214,7 @@ function initClock() {
   const clock = document.querySelector('.header__clock')
   const update = () => {
     const d = new Date()
-    clock.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`
+    clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
   }
   update()
   setInterval(update, 60000)
