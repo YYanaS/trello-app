@@ -223,7 +223,7 @@ function initClock() {
 // Render
 function buildTemplateTask({ id, title, description, assignee, status, createdAt }) {
   return `
-    <article class="task" data-id="${id}">
+    <article class="task task__${status}" data-id="${id}" draggable="true">
       <div class="task__header">
         <h4 class="task__title">${title}</h4>
         <div class="dropdown">
@@ -275,4 +275,53 @@ function updateCounters(tasks) {
   document.querySelector('.done .badge').textContent = tasks.filter(t => t.status === 'done').length
 }
 
-console.log('App loaded')
+//Перетаскивание
+let draggedTask = null
+
+// Когда тащим
+boardElement.addEventListener('dragstart', (element) => {
+  if (element.target.classList.contains('task')) {
+    draggedTask = element.target
+    draggedTask.style.opacity = '0.5'
+  }
+})
+
+// Когда отпускаем
+boardElement.addEventListener('dragend', (element) => {
+  if (draggedTask) {
+    draggedTask.style.opacity = '1'
+    draggedTask = null
+  }
+})
+
+// Куда можно бросить
+boardElement.addEventListener('dragover', (element) => {
+  element.preventDefault()
+})
+
+// Когда бросаем
+boardElement.addEventListener('drop', (element) => {
+  element.preventDefault()
+  
+  // Куда бросили?
+  const column = element.target.closest('.category')
+  if (!column || !draggedTask) return
+  
+  // Какой статус у этой колонки?
+  let newStatus = ''
+  if (column.classList.contains('todo')) newStatus = 'todo'
+  if (column.classList.contains('inProgress')) newStatus = 'inProgress'  
+  if (column.classList.contains('done')) newStatus = 'done'
+  
+  // Находим задачу в массиве
+  const taskId = draggedTask.dataset.id
+  const taskIndex = state.data.findIndex(task => task.id === taskId)
+  
+  if (taskIndex !== -1) {
+    // Обновляем статус
+    state.data[taskIndex].status = newStatus
+    
+    // Перерисовываем
+    setState({ data: state.data })
+  }
+})

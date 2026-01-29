@@ -115,7 +115,6 @@ $border-radius-xl: 20px;
 
 /* Стилизация карточки задачи */
 .task {
-  background: rgba(200, 227, 189, 0.52);
   padding: 15px 10px;
   border-radius: 20px;
 }
@@ -205,6 +204,18 @@ $border-radius-xl: 20px;
   margin-bottom: 10px;
 }
 
+.task__todo{
+  background-color: rgba(200, 227, 189, 0.52);
+}
+
+.task__inProgress{
+  background-color: #d3bbd5;
+}
+
+.task__done{
+  background-color: #c3e1e7;
+}
+
 .task__information {
   display: flex;
   column-gap: 5px;
@@ -263,4 +274,14 @@ $border-radius-xl: 20px;
   max-height: 150px;
   overflow-y: auto;
   resize: vertical;  
+}
+
+/*перетаскивание*/
+
+.task[draggable="true"] {
+  cursor: grab;
+  
+  &:active {
+    cursor: grabbing;
+  }
 }
