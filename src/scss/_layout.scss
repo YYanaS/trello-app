@@ -1,0 +1,56 @@
+@import "variables";
+
+/* BODY */
+body {
+  font-family: $font-family;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* header */
+.header {
+  padding: 28px 24px;
+  background-color: $header-bg;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  border: 1px solid $header-border;
+  border-radius: $radius-lg;
+
+  &__title {
+    font-size: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  &__clock {
+    padding: 5px 20px;
+    background-color: $clock-bg;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+  }
+}
+
+/* main */
+.main {
+display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 0 15px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0 10px;
+  }
+}

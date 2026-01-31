@@ -1,17 +1,15 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parcel Vanilla App</title>
+  <title>Trello</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
   <script type="module" src="./js/app.js"></script>
 </head>
-
 <body>
   <div class="container">
     <header class="header">
@@ -22,56 +20,42 @@
       <section class="category todo">
         <div class="category__header">
           <h3 class="category__title">TODO</h3>
-          <p class="badge rounded-pill">0</p>
+          <p class="category__counter">0</p>
         </div>
-        <div class="category__body">
-          <!-- Задачи будут добавляться сюда через JavaScript -->
-        </div>
+        <div class="category__body"></div>
         <button class="category__button btn" id="buttonAddTodo">Add todo</button>
       </section>
-
       <section class="category inProgress">
         <div class="category__header">
           <h3 class="category__title">IN PROGRESS</h3>
-          <p class="badge rounded-pill">0</p>
+          <p class="category__counter">0</p>
         </div>
-        <div class="category__body">
-          <!-- Задачи будут добавляться сюда через JavaScript -->
-        </div>
+        <div class="category__body"></div>
       </section>
-
       <section class="category done">
         <div class="category__header">
           <h3 class="category__title">DONE</h3>
-          <p class="badge rounded-pill">0</p>
+          <p class="category__counter">0</p>
         </div>
-        <div class="category__body">
-          <!-- Задачи будут добавляться сюда через JavaScript -->
-        </div>
+        <div class="category__body"></div>
         <button class="category__button btn" id="buttonDeleteAll">Delete all</button>
       </section>
     </main>
   </div>
-  <!-- Delete modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content delete-confirmation">
-        <h3 class="confirmation__heading">Delete task?</h3>
-        <p class="confirmation__text">
-          The task will be permanently deleted.
-        </p>
-        <div class="d-flex justify-content-center gap-2">
-          <button class="confirmation__button btn btn-secondary" data-bs-dismiss="modal">
-            Cancel
-          </button>
-          <button class="confirmation__button btn btn-danger">
-            Confirm
-          </button>
+        <div class="modal-body text-center">
+          <h3 class="confirmation__heading">Delete task?</h3>
+          <p class="confirmation__text">The task will be permanently deleted.</p>
+          <div class="d-flex justify-content-center gap-2">
+            <button class="confirmation__button btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button class="confirmation__button btn btn-danger">Confirm</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- Add Task Modal -->
   <div class="modal fade" id="addTaskModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -103,5 +87,4 @@
     </div>
   </div>
 </body>
-
 </html>

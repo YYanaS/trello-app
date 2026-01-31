@@ -1,2 +1,5 @@
-@use './libs.scss';
-@use './scaffold.scss';
+@import "libs";
+@import "variables";
+@import "base";
+@import "layout";
+@import "components";

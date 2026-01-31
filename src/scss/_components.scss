@@ -1,0 +1,262 @@
+@import "variables";
+
+/* CATEGORY */
+.category {
+  display: flex;
+  flex: 1 1 300px;
+  flex-direction: column;
+  border: 1px solid #000;
+  border-radius: $radius-xl;
+  width: 100%;
+  min-height: 320px;
+  overflow: hidden;
+
+  &__header {
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  &__counter {
+    margin: 0;
+    color: #000;
+  }
+
+  &__body {
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  &__button {
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    background: transparent;
+    transition: opacity 0.2s ease;
+    text-transform: uppercase;
+    margin-top: auto;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+.todo> :first-child.category__header {
+  background-color: $todo-color;
+}
+
+.inProgress> :first-child.category__header {
+  background-color: $inprogress-color;
+}
+
+.done> :first-child.category__header {
+  background-color: $done-color;
+}
+
+.todo>.category__button {
+  background-color: $todo-color;
+  color: #000;
+  border-radius: $border-radius;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.done>.category__button {
+  background-color: $done-color;
+  color: #000;
+  border-radius: $border-radius;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+/* TASK */
+.task {
+  padding: 15px 10px;
+  border-radius: $radius-xl;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  &__description {
+    font-size: 14px;
+    margin-bottom: 10px;
+    word-break: break-word;
+  }
+
+  &__status {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  &__todo {
+    background-color: $task-card-bg;
+  }
+
+  &__inProgress {
+    background-color: $inprogress-color;
+  }
+
+  &__done {
+    background-color: $done-color;
+  }
+
+  &__information {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+
+  &[draggable="true"] {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+}
+
+/* DROPDOWN */
+.dropdown-toggle {
+  text-decoration: none;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.task__actions-dropdown {
+  position: relative;
+
+  &:hover .task__actions-menu {
+    display: flex;
+  }
+}
+
+.task__actions-toggle {
+  cursor: pointer;
+}
+
+.task__actions-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  z-index: 2;
+}
+
+.task__action-btn {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #e0dfdf;
+  }
+
+  &.btn-edit {
+    border-bottom: 1px solid #eee;
+  }
+}
+
+/* DELETE CONFIRMATION MODAL */
+.delete-confirmation {
+  background-color: $todo-color;
+  border-radius: $radius-lg;
+  border: none;
+
+  .modal-body {
+    padding: 30px;
+    text-align: center;
+  }
+}
+
+.confirmation {
+  &__heading {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  &__text {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  &__button {
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+}
+
+.modal-header {
+  background-color: $task-card-bg;
+}

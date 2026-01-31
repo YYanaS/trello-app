@@ -197,7 +197,7 @@ function getDataFromStorage() {
 }
 
 function getIndexTaskById(id) {
-  return state.data.findIndex(t => t.id === id)
+  return state.data.findIndex(task => task.id === id)
 }
 
 function prepareCreatedAtDate(dateString) {
@@ -213,11 +213,16 @@ function prepareCreatedAtDate(dateString) {
 function initClock() {
   const clock = document.querySelector('.header__clock')
   const update = () => {
-    const d = new Date()
-    clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+    clock.textContent = new Date().toTimeString().slice(0, 5)
   }
-  update()
-  setInterval(update, 60000)
+  
+  // Обновляем каждую минуту, начиная со следующей целой минуты
+  setTimeout(() => {
+    update()
+    setInterval(update, 60000)
+  }, 60000 - new Date().getSeconds() * 1000)
+  
+  update() 
 }
 
 // Render
@@ -250,43 +255,46 @@ function buildTemplateTask({ id, title, description, assignee, status, createdAt
 }
 
 function render(tasks) {
-  const todo = document.querySelector('.todo .category__body')
-  const inProgress = document.querySelector('.inProgress .category__body')
-  const done = document.querySelector('.done .category__body')
-
-  todo.innerHTML = ''
-  inProgress.innerHTML = ''
-  done.innerHTML = ''
-
+  document.querySelector('.todo .category__body').innerHTML = ''
+  document.querySelector('.inProgress .category__body').innerHTML = ''
+  document.querySelector('.done .category__body').innerHTML = ''
+  
+  // Потом распределяем задачи
+  const containers = {
+    todo: document.querySelector('.todo .category__body'),
+    inProgress: document.querySelector('.inProgress .category__body'),
+    done: document.querySelector('.done .category__body')
+  }
+  
   tasks.forEach(task => {
-    const html = buildTemplateTask(task)
-    if (task.status === 'todo') todo.insertAdjacentHTML('beforeend', html)
-    if (task.status === 'inProgress') inProgress.insertAdjacentHTML('beforeend', html)
-    if (task.status === 'done') done.insertAdjacentHTML('beforeend', html)
+    const container = containers[task.status]
+    if (container) {
+      container.insertAdjacentHTML('beforeend', buildTemplateTask(task))
+    }
   })
-
+  
   initDropdowns()
   updateCounters(tasks)
 }
 
 function updateCounters(tasks) {
-  document.querySelector('.todo .badge').textContent = tasks.filter(t => t.status === 'todo').length
-  document.querySelector('.inProgress .badge').textContent = tasks.filter(t => t.status === 'inProgress').length
-  document.querySelector('.done .badge').textContent = tasks.filter(t => t.status === 'done').length
+  document.querySelector('.todo .category__counter').textContent = tasks.filter(t => t.status === 'todo').length
+  document.querySelector('.inProgress .category__counter').textContent = tasks.filter(t => t.status === 'inProgress').length
+  document.querySelector('.done .category__counter').textContent = tasks.filter(t => t.status === 'done').length
 }
 
 //Перетаскивание
 let draggedTask = null
 
-// Когда тащим
+// Начало перемещения задачи
 boardElement.addEventListener('dragstart', (element) => {
   if (element.target.classList.contains('task')) {
-    draggedTask = element.target
+    draggedTask = element.target // Запоминаем, какую задачу тащим
     draggedTask.style.opacity = '0.5'
   }
 })
 
-// Когда отпускаем
+// Конец перемещения задачи
 boardElement.addEventListener('dragend', (element) => {
   if (draggedTask) {
     draggedTask.style.opacity = '1'
@@ -294,34 +302,31 @@ boardElement.addEventListener('dragend', (element) => {
   }
 })
 
-// Куда можно бросить
+// Куда можно переместить
 boardElement.addEventListener('dragover', (element) => {
-  element.preventDefault()
+  element.preventDefault() //Разрешаем "отпустить" задачу в этой области
 })
 
 // Когда бросаем
 boardElement.addEventListener('drop', (element) => {
   element.preventDefault()
   
-  // Куда бросили?
+  // Проверка на наличии "калонки" и "самой задачи"
   const column = element.target.closest('.category')
   if (!column || !draggedTask) return
   
-  // Какой статус у этой колонки?
+  // Определяем новый статус задачи на основе класса колонки
   let newStatus = ''
   if (column.classList.contains('todo')) newStatus = 'todo'
   if (column.classList.contains('inProgress')) newStatus = 'inProgress'  
   if (column.classList.contains('done')) newStatus = 'done'
   
-  // Находим задачу в массиве
+  // Находим задачу в массиве, если нашли, меняем статус
   const taskId = draggedTask.dataset.id
   const taskIndex = state.data.findIndex(task => task.id === taskId)
   
   if (taskIndex !== -1) {
-    // Обновляем статус
     state.data[taskIndex].status = newStatus
-    
-    // Перерисовываем
     setState({ data: state.data })
   }
 })
