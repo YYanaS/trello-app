@@ -1,4 +1,4 @@
-import { Task } from './Task.js'
+import { Task } from './task.js'
 
 const TASKS_STORAGE_KEY = 'tasks'
 
@@ -11,7 +11,7 @@ function getDataFromStorage() {
   return data ? JSON.parse(data).map(item => new Task(item)) : []
 }
 
-export { 
-    saveDataToStorage, 
-    getDataFromStorage,
+export {
+  saveDataToStorage,
+  getDataFromStorage,
 }

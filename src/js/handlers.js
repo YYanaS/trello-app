@@ -3,15 +3,16 @@ import { saveDataToStorage } from './storage.js'
 import { render } from './render.js'
 import { getUsers } from './users.js'
 
-import { 
+
+import {
   boardElement,
-  addTaskModalInstance,
-  taskForm,
-  deleteModalInstance,
-  deleteModalConfirmButton,
-  taskTitleInput,
-  taskDescriptionInput,
-  taskAssigneeInput
+  addTaskModalInstanceElement,
+  taskFormElement,
+  deleteModalInstanceElement,
+  deleteModalConfirmButtonElement,
+  taskTitleElement,
+  taskDescriptionElement,
+  taskAssigneeElement,
 } from './dom.js'
 
 let state = { data: [] }
@@ -25,20 +26,24 @@ function setState(newState) {
 }
 
 function openEditTaskModal(taskId) {
-  const task = state.data.find(t => t.id === taskId)
+  const task = state.data.find(task => task.id === taskId)
   if (!task) return
 
-  taskTitleInput.value = task.title
-  taskDescriptionInput.value = task.description || ''
-  taskAssigneeInput.value = task.assignee
+  taskTitleElement.value = task.title
+  taskDescriptionElement.value = task.description || ''
+  taskAssigneeElement.value = task.assignee
 
   currentEditingTaskId = taskId
-  addTaskModalInstance.show()
+  addTaskModalInstanceElement.show()
+}
+
+function handleClickAddTaskButton() {
+  addTaskModalInstanceElement.show()
 }
 
 function handleTaskFormSubmit(event) {
   event.preventDefault()
-  const formData = new FormData(taskForm)
+  const formData = new FormData(taskFormElement)
   const title = formData.get('title')?.trim()
   const description = formData.get('description')?.trim()
   const assignee = formData.get('assignee')
@@ -46,15 +51,15 @@ function handleTaskFormSubmit(event) {
   if (!title || !assignee) return alert('Please fill the Title and select the Assignee')
 
   if (currentEditingTaskId) {
-    const task = state.data.find(t => t.id === currentEditingTaskId)
+    const task = state.data.find(task => task.id === currentEditingTaskId)
     if (task) Object.assign(task, { title, description, assignee })
   } else {
     state.data.push(new Task({ title, description, assignee }))
   }
 
   setState({ data: state.data })
-  taskForm.reset()
-  addTaskModalInstance.hide()
+  taskFormElement.reset()
+  addTaskModalInstanceElement.hide()
   currentEditingTaskId = null
 }
 
@@ -75,21 +80,21 @@ function handleBoardClick(event) {
 }
 
 function handleClickDeleteTask(taskId) {
-  deleteModalConfirmButton.onclick = () => {
+  deleteModalConfirmButtonElement.onclick = () => {
     const index = getIndexTaskById(taskId)
     if (index !== -1) state.data.splice(index, 1)
     setState({ data: state.data })
-    deleteModalInstance.hide()
+    deleteModalInstanceElement.hide()
   }
-  deleteModalInstance.show()
+  deleteModalInstanceElement.show()
 }
 
 function handleClickDeleteAll() {
-  deleteModalConfirmButton.onclick = () => {
-    setState({ data: state.data.filter(t => t.status !== 'done') })
-    deleteModalInstance.hide()
+  deleteModalConfirmButtonElement.onclick = () => {
+    setState({ data: state.data.filter(task => task.status !== 'done') })
+    deleteModalInstanceElement.hide()
   }
-  deleteModalInstance.show()
+  deleteModalInstanceElement.show()
 }
 
 function handleChangeTaskStatus(event) {
@@ -109,9 +114,9 @@ function getIndexTaskById(id) {
 
 //Drag & Drop 
 function initDragAndDrop() {
-  boardElement.addEventListener('dragstart', (e) => {
-    if (e.target.classList.contains('task')) {
-      draggedTask = e.target
+  boardElement.addEventListener('dragstart', (event) => {
+    if (event.target.classList.contains('task')) {
+      draggedTask = event.target
       draggedTask.style.opacity = '0.5'
     }
   })
@@ -121,11 +126,11 @@ function initDragAndDrop() {
     draggedTask = null
   })
 
-  boardElement.addEventListener('dragover', (e) => e.preventDefault())
+  boardElement.addEventListener('dragover', (event) => event.preventDefault())
 
-  boardElement.addEventListener('drop', (e) => {
-    e.preventDefault()
-    const column = e.target.closest('.category')
+  boardElement.addEventListener('drop', (event) => {
+    event.preventDefault()
+    const column = event.target.closest('.category')
     if (!column || !draggedTask) return
 
     let newStatus = ''
@@ -144,18 +149,19 @@ function initDragAndDrop() {
 
 function initAssigneeSelect() {
   const users = getUsers()
-  taskAssigneeInput.innerHTML = ''
+  taskAssigneeElement.innerHTML = ''
   users.forEach(userName => {
     const option = document.createElement('option')
     option.value = userName
     option.textContent = userName
-    taskAssigneeInput.appendChild(option)
+    taskAssigneeElement.appendChild(option)
   })
 }
 
-export { 
+export {
   state,
   setState,
+  handleClickAddTaskButton,
   openEditTaskModal,
   handleTaskFormSubmit,
   handleBoardClick,

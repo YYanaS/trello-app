@@ -4,18 +4,18 @@ import {
   buttonAddTaskElement,
   buttonDeleteAllDoneElement,
   boardElement,
-  addTaskModalInstance,
-  taskForm
+  taskFormElement,
 } from './dom.js'
 
 import { 
   setState,
+  handleClickAddTaskButton,
   handleTaskFormSubmit,
   handleBoardClick,
   handleClickDeleteAll,
   handleChangeTaskStatus,
   initDragAndDrop,
-  initAssigneeSelect
+  initAssigneeSelect,
 } from './handlers.js'
 
 import { getDataFromStorage } from './storage.js'
@@ -27,8 +27,8 @@ async function initApp() {
   initAssigneeSelect()       // заполняем select
   setState({ data: getDataFromStorage() })
 
-  buttonAddTaskElement.addEventListener('click', () => addTaskModalInstance.show())
-  taskForm.addEventListener('submit', handleTaskFormSubmit)
+  buttonAddTaskElement.addEventListener('click', handleClickAddTaskButton)
+  taskFormElement.addEventListener('submit', handleTaskFormSubmit)
   buttonDeleteAllDoneElement.addEventListener('click', handleClickDeleteAll)
   boardElement.addEventListener('click', handleBoardClick)
   boardElement.addEventListener('change', handleChangeTaskStatus)
