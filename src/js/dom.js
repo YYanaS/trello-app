@@ -1,22 +1,22 @@
 import { Modal } from 'bootstrap'
 
 //Получение DOM-элементов
-const buttonAddTaskElement = document.getElementById('buttonAddTodo')
-const buttonDeleteAllDoneElement = document.getElementById('buttonDeleteAll')
-const boardElement = document.getElementById('board')
+const buttonAddTaskElement = document.querySelector('#buttonAddTodo')
+const buttonDeleteAllDoneElement = document.querySelector('#buttonDeleteAll')
+const boardElement = document.querySelector('#board')
 
-const deleteModalElement = document.getElementById('deleteModal')
-const deleteModalInstanceElement = new Modal(deleteModalElement) // Экземпляр Bootstrap модалки для управления её отображением
+const deleteModalElement = document.querySelector('#deleteModal')
+const deleteModalInstanceElement = new Modal(deleteModalElement)
 const deleteModalConfirmButtonElement = deleteModalElement.querySelector('.btn-danger')
 
-const addTaskModalElement = document.getElementById('addTaskModal')
-const addTaskModalInstanceElement = new Modal(addTaskModalElement) // Экземпляр Bootstrap модалки для управления её отображением
-const saveTaskButtonElement = document.getElementById('saveTaskButton')
+const addTaskModalElement = document.querySelector('#addTaskModal')
+const addTaskModalInstanceElement = new Modal(addTaskModalElement)
+const saveTaskButtonElement = document.querySelector('#saveTaskButton')
 
-const taskFormElement = document.getElementById('taskForm')
-const taskTitleElement = document.getElementById('taskTitle')
-const taskDescriptionElement = document.getElementById('taskDescription')
-const taskAssigneeElement = document.getElementById('taskAssignee')
+const taskFormElement = document.querySelector('#taskForm')
+const taskTitleElement = document.querySelector('#taskTitle')
+const taskDescriptionElement = document.querySelector('#taskDescription')
+const taskAssigneeElement = document.querySelector('#taskAssignee')
 
 export {
   buttonAddTaskElement,
