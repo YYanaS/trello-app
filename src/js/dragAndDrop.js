@@ -34,10 +34,23 @@ function handleDrop(event) {
     const task = state.data.find(t => t.id === draggedTask.dataset.id)
     if (!task) return
 
-    // Обновляем статус задачи в зависимости от колонки, в которую её переместили
-    if (column.classList.contains('todo')) task.status = 'todo'
-    if (column.classList.contains('inProgress')) task.status = 'inProgress'
-    if (column.classList.contains('done')) task.status = 'done'
+    // Определяем новый статус
+    let newStatus = ''
+    if (column.classList.contains('todo')) newStatus = 'todo'
+    if (column.classList.contains('inProgress')) newStatus = 'inProgress'
+    if (column.classList.contains('done')) newStatus = 'done'
+
+    // Проверка лимита для inProgress
+    if (newStatus === 'inProgress' && task.status !== 'inProgress') {
+        const inProgressCount = state.data.filter(t => t.status === 'inProgress').length
+        if (inProgressCount >= 10) {
+            alert('Нельзя больше 10 задач в колонке "In Progress"!')
+            return
+        }
+    }
+
+    // Обновляем статус задачи
+    task.status = newStatus
 
     // Перерисовываем доску
     setState({ data: state.data })

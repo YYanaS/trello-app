@@ -39,34 +39,55 @@ function handleClickAddTaskButton() {
   addTaskModalInstanceElement.show() //открываем модальное окно
 }
 
-//Обработчик сохранения данных из формы
 function handleTaskFormSubmit(event) {
   event.preventDefault()
-
-  const formData = new FormData(taskFormElement) //собираем все поля формы
+  
+  const formData = new FormData(taskFormElement) // собираем все поля формы
   const title = formData.get('title')?.trim()
   const description = formData.get('description')?.trim()
   const assignee = formData.get('assignee')
+  const status = formData.get('status') || 'todo' // получаем статус из формы, по умолчанию "todo"
 
   if (!title || !assignee) {
     alert('Please fill the Title and select the Assignee')
     return
   }
 
+  // Проверка лимита для inProgress
+  if (!currentEditingTaskId && status === 'inProgress') { // проверяем только для новых задач
+    const inProgressCount = state.data.filter(task => task.status === 'inProgress').length
+    if (inProgressCount >= 10) {
+      alert('Нельзя больше 10 задач в колонке "In Progress"!')
+      return
+    }
+  }
+
   if (currentEditingTaskId) {
+    // Редактирование существующей задачи
     const task = state.data.find(task => task.id === currentEditingTaskId)
     if (task) {
       task.title = title
       task.description = description
       task.assignee = assignee
+
+      // Если редактируем и меняем статус на inProgress
+      if (status === 'inProgress' && task.status !== 'inProgress') {
+        const inProgressCount = state.data.filter(task => task.status === 'inProgress').length
+        if (inProgressCount >= 10) {
+          alert('Нельзя больше 10 задач в колонке "In Progress"!')
+          return
+        }
+      }
+
+      task.status = status
     }
   } else {
-    state.data.push(new Task({ title, description, assignee })) //создаем задачу и добавляем её в массив state.data
+    state.data.push(new Task({ title, description, assignee, status }))
   }
 
   setState({ data: state.data })
-  taskFormElement.reset() //очищаем поля формы
-  addTaskModalInstanceElement.hide() //закрываем модальное окно
+  taskFormElement.reset()
+  addTaskModalInstanceElement.hide()
   currentEditingTaskId = null
 }
 
@@ -115,7 +136,6 @@ function handleClickDeleteAll() {
   deleteModalInstanceElement.show()
 }
 
-// Обработчик изменения статуса задачи
 function handleChangeTaskStatus(event) {
   const select = event.target.closest('.task__status')
   if (!select) return
@@ -124,7 +144,18 @@ function handleChangeTaskStatus(event) {
   const index = getIndexTaskById(taskElement.dataset.id)
   if (index === -1) return
 
-  const newData = structuredClone(state.data) //Создаем глубокую копию, чтобы не изменять сам массив
+  const newData = structuredClone(state.data)
+
+  // Лимит 10 задач в колонке inProgress
+  if (select.value === 'inProgress') {
+    const inProgressCount = newData.filter(task => task.status === 'inProgress').length
+    if (inProgressCount >= 10) {
+      alert('Нельзя больше 10 задач в колонке "In Progress"!')
+      select.value = newData[index].status // Возвращаем select к предыдущему значению
+      return
+    }
+  }
+
   newData[index].status = select.value
   setState({ data: newData })
 }
