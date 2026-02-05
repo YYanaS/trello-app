@@ -1,32 +1,38 @@
 import '../scss/app.scss'
 
-import { 
+import {
   buttonAddTaskElement,
   buttonDeleteAllDoneElement,
   boardElement,
   taskFormElement,
 } from './dom.js'
 
-import { 
+import {
   setState,
+} from './state.js'
+
+import {
   handleClickAddTaskButton,
   handleTaskFormSubmit,
   handleBoardClick,
   handleClickDeleteAll,
   handleChangeTaskStatus,
-  initDragAndDrop,
   initAssigneeSelect,
 } from './handlers.js'
 
+import { initDragAndDrop } from './dragAndDrop.js'
 import { getDataFromStorage } from './storage.js'
 import { fetchUsers } from './users.js'
-import { initClock } from './time.js' 
+import { initClock } from './time.js'
 
+
+//Функция инициализации приложения
 async function initApp() {
-  await fetchUsers()         // получаем пользователей с API
-  initAssigneeSelect()       // заполняем select
-  setState({ data: getDataFromStorage() })
+  await fetchUsers()          // получаем пользователей с API
+  initAssigneeSelect()        // заполняем select
+  setState({ data: getDataFromStorage() }) //Получаем задачи из localStorage и устанавливаем их в состояние приложения
 
+  // Обработчики событий
   buttonAddTaskElement.addEventListener('click', handleClickAddTaskButton)
   taskFormElement.addEventListener('submit', handleTaskFormSubmit)
   buttonDeleteAllDoneElement.addEventListener('click', handleClickDeleteAll)
@@ -37,5 +43,5 @@ async function initApp() {
   initDragAndDrop()
 }
 
-initApp()
-initClock()
+initApp() //Запуск приложения
+initClock() //Инициализация часов

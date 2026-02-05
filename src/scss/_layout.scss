@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 /* BODY */
 body {
@@ -43,7 +43,7 @@ body {
 
 /* main */
 .main {
-display: flex;
+  display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: space-between;

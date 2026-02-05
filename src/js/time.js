@@ -1,7 +1,8 @@
+//Инициализация часов
 function initClock() {
   const clock = document.querySelector('.header__clock')
   const update = () => {
-    clock.textContent = new Date().toTimeString().slice(0, 5)
+    clock.textContent = new Date().toTimeString().slice(0, 5)  // Получаем текущее время, преобразуем в строку и берем первые 5 символов
   }
 
   // Обновляем каждую минуту, начиная со следующей целой минуты

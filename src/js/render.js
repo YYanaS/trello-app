@@ -1,15 +1,11 @@
 import { Dropdown } from 'bootstrap'
 
-function prepareCreatedAtDate(dateString) {
-  return new Intl.DateTimeFormat('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: false
-  }).format(new Date(dateString))
-}
+import {
+  prepareCreatedAtDate,
+} from './helpers.js'
 
+
+//Функция для создания HTML-шаблона задачи
 function buildTemplateTask({ id, title, description, assignee, status, createdAt }) {
   return `
     <article class="task task__${status}" data-id="${id}" draggable="true">
@@ -40,37 +36,41 @@ function buildTemplateTask({ id, title, description, assignee, status, createdAt
   `
 }
 
+//Функция для рендеринга всех задач по категориям
 function render(tasks) {
   document.querySelector('.todo .category__body').innerHTML = ''
   document.querySelector('.inProgress .category__body').innerHTML = ''
   document.querySelector('.done .category__body').innerHTML = ''
 
+  // Контейнеры для каждой категории
   const containers = {
     todo: document.querySelector('.todo .category__body'),
     inProgress: document.querySelector('.inProgress .category__body'),
     done: document.querySelector('.done .category__body')
   }
 
+  // Добавляем каждую задачу в соответствующий контейнер
   tasks.forEach(task => {
     containers[task.status]?.insertAdjacentHTML('beforeend', buildTemplateTask(task))
   })
 
+  // Инициализируем dropdown-меню для каждой кнопки
   document.querySelectorAll('.dropdown-toggle').forEach(el => new Dropdown(el))
   updateCounters(tasks)
 }
 
+//Функция для обновления счетчиков задач по категориям
 function updateCounters(tasks) {
   document.querySelector('.todo .category__counter').textContent =
-    tasks.filter(t => t.status === 'todo').length
+      tasks.filter(task => task.status === 'todo').length
   document.querySelector('.inProgress .category__counter').textContent =
-    tasks.filter(t => t.status === 'inProgress').length
+      tasks.filter(task => task.status === 'inProgress').length
   document.querySelector('.done .category__counter').textContent =
-    tasks.filter(t => t.status === 'done').length
+      tasks.filter(task => task.status === 'done').length
 }
 
-export { 
-  prepareCreatedAtDate, 
-  buildTemplateTask, 
-  render, 
-  updateCounters,
+export {
+  buildTemplateTask,
+  render,
+  updateCounters
 }
